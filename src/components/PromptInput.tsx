@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface PromptInputProps {
   onSubmit: (prompt: string) => void;
+  autoFocus?: boolean;
 }
 
-export function PromptInput({ onSubmit }: PromptInputProps) {
+export function PromptInput({ onSubmit, autoFocus = true }: PromptInputProps) {
   const [value, setValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   const handleSubmit = (): void => {
     const trimmed = value.trim();
@@ -29,6 +37,7 @@ export function PromptInput({ onSubmit }: PromptInputProps) {
           </svg>
         </div>
         <input
+          ref={inputRef}
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -45,6 +54,7 @@ export function PromptInput({ onSubmit }: PromptInputProps) {
         aria-label="Submit prompt"
       >
         Submit
+        <kbd className="hidden sm:inline-block ml-2 text-[10px] font-mono opacity-70 border border-white/30 rounded px-1.5 py-0.5" aria-hidden="true">↵</kbd>
       </button>
     </div>
   );

@@ -52,6 +52,7 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
   return (
     <section
       aria-label="Diagnostic logging panel"
+      aria-live="polite"
       className="bg-surface rounded-xl border border-border-primary border-t-2 border-t-amber-500 shadow-sm overflow-hidden"
     >
       {/* Panel Header */}
@@ -91,7 +92,8 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
               </svg>
             </div>
             <p className="text-sm text-text-muted font-medium">Awaiting prompt</p>
-            <p className="text-xs text-text-muted mt-1">Submit a prompt above to see diagnostic logging</p>
+            <p className="text-xs text-text-muted mt-1">Executes first, then retroactively scans for violations</p>
+            <p className="text-[11px] text-text-muted mt-2 opacity-70">Type a prompt above or click a sample below ↓</p>
           </div>
         )}
 

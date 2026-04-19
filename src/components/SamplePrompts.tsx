@@ -55,7 +55,7 @@ export function SamplePrompts({ onSelect }: SamplePromptsProps) {
                 <button
                   key={prompt.text}
                   onClick={() => onSelect(prompt.text)}
-                  className={`w-full text-left text-xs px-3 py-2 border border-border-primary rounded-lg bg-surface ${config.buttonHover} active:scale-[0.98] transition-all duration-150 min-h-[44px] flex items-center leading-relaxed`}
+                  className={`w-full text-left text-xs px-3 py-2 border border-border-primary rounded-lg bg-surface ${config.buttonHover} active:scale-[0.98] transition-all duration-150 min-h-[44px] flex items-center leading-relaxed focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary`}
                   title={prompt.text}
                   aria-label={`Sample prompt: ${prompt.label} (${prompt.category})`}
                 >

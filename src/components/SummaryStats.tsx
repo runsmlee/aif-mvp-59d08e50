@@ -62,7 +62,12 @@ const statItems = [
 
 export function SummaryStats({ stats }: SummaryStatsProps) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4" role="region" aria-label="Session statistics">
+    <div
+      className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
+      role="region"
+      aria-label="Session statistics"
+      aria-live="polite"
+    >
       {statItems.map((item) => (
         <div
           key={item.key}

@@ -143,6 +143,30 @@ export function App() {
 
       {/* Main Content */}
       <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Hero Intro — communicates the core thesis in 5 seconds */}
+        {!hasSubmitted && (
+          <section className="text-center max-w-2xl mx-auto animate-fade-in" aria-label="Introduction">
+            <h2 className="text-xl sm:text-2xl font-bold text-text-primary leading-tight">
+              See the difference between{' '}
+              <span className="text-amber-600">diagnostic logging</span> and{' '}
+              <span className="text-green-600">prophylactic blocking</span>
+            </h2>
+            <p className="mt-3 text-sm text-text-secondary leading-relaxed">
+              Submit any prompt below. The <strong>Diagnostic</strong> panel executes first, then scans for violations after the fact. The <strong>Prophylactic</strong> panel scans first and blocks violations before they execute.
+            </p>
+            <div className="mt-4 flex items-center justify-center gap-6 text-xs text-text-muted">
+              <span className="flex items-center gap-1.5">
+                <span className="w-3 h-1 rounded-full bg-amber-400" aria-hidden="true" />
+                Execute → Scan
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3 h-1 rounded-full bg-green-500" aria-hidden="true" />
+                Scan → Block/Allow
+              </span>
+            </div>
+          </section>
+        )}
+
         {/* Summary Stats */}
         <div className={hasSubmitted ? 'animate-slide-up' : ''}>
           <SummaryStats stats={stats} />
