@@ -3,15 +3,77 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="GateFirst — See the difference between diagnostic logging and prophylactic blocking side by side. Interactive governance visualization for DevOps and security teams." />
-    <meta name="color-scheme" content="light" />
     <title>GateFirst — Prophylactic Governance Visualizer</title>
-    <script type="module" crossorigin src="/assets/index-IyjIJGcV.js"></script>
+    <meta name="description" content="GateFirst — See the difference between diagnostic logging and prophylactic blocking side by side. Interactive governance visualization for DevOps and security teams." />
+    <meta property="og:title" content="GateFirst — Prophylactic Governance Visualizer" />
+    <meta property="og:description" content="GateFirst — See the difference between diagnostic logging and prophylactic blocking side by side. Interactive governance visualization for DevOps and security teams." />
+    <meta name="color-scheme" content="light" />
+    <meta name="aif-mvp-id" content="%VITE_MVP_ID%" />
+    <meta name="aif-api" content="https://www.aifounders.live/api/analytics" />
+    <script async src="https://www.aifounders.live/aif.js"></script>
+    <style>
+      /* Critical inline styles — visible before Tailwind loads */
+      body {
+        margin: 0;
+        background-color: #F9FAFB;
+        color: #111827;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #root-fallback {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        padding: 2rem;
+        text-align: center;
+      }
+      #root-fallback h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #111827;
+      }
+      #root-fallback p {
+        font-size: 0.875rem;
+        color: #6B7280;
+        max-width: 28rem;
+        line-height: 1.5;
+      }
+      #root-fallback .loader {
+        margin-top: 1.5rem;
+        width: 2rem;
+        height: 2rem;
+        border: 3px solid #E5E7EB;
+        border-top-color: #B91C1C;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      noscript p {
+        font-size: 1rem;
+        color: #B91C1C;
+        margin-top: 1rem;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-BRxcGu33.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-DF2fYuay.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-1TDjhuIx.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-CseMQwfs.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BbmRnu9Q.css">
   </head>
-  <body class="bg-surface-secondary text-text-primary antialiased">
-    <div id="root"></div>
+  <body>
+    <div id="root">
+      <!-- Fallback content visible before React mounts -->
+      <div id="root-fallback">
+        <h1>GateFirst</h1>
+        <p>Prophylactic Governance Visualizer — loading&hellip;</p>
+        <div class="loader"></div>
+        <noscript><p>JavaScript is required to use GateFirst. Please enable JavaScript in your browser settings.</p></noscript>
+      </div>
+    </div>
   </body>
 </html>

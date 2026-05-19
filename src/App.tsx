@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { PolicyViolation, TimelineStep, PanelState } from './types';
 import { evaluatePrompt } from './engine/policyEngine';
 import { PromptInput } from './components/PromptInput';
@@ -7,6 +7,12 @@ import { ProphylacticPanel } from './components/ProphylacticPanel';
 import { SamplePrompts } from './components/SamplePrompts';
 import { SummaryStats } from './components/SummaryStats';
 import type { Stats } from './components/SummaryStats';
+
+function trackEvent(event: string, props?: Record<string, unknown>): void {
+  if (typeof window !== 'undefined' && window.aif?.track) {
+    window.aif.track(event, props);
+  }
+}
 
 function buildDiagnosticTimeline(violations: PolicyViolation[]): TimelineStep[] {
   const steps: TimelineStep[] = [
@@ -61,11 +67,17 @@ export function App() {
   });
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  useEffect(() => {
+    trackEvent('page_view', { path: window.location.pathname });
+  }, []);
+
   const handleSubmit = useCallback((prompt: string) => {
     setCurrentPrompt(prompt);
     setHasSubmitted(true);
     setDiagnosticState({ status: 'running', prompt, violations: [], timeline: [], blocked: false });
     setProphylacticState({ status: 'running', prompt, violations: [], timeline: [], blocked: false });
+
+    trackEvent('prompt_submitted', { prompt_length: prompt.length });
 
     const violations = evaluatePrompt(prompt);
 
@@ -95,10 +107,16 @@ export function App() {
         blocked: prev.blocked + (violations.length > 0 ? 1 : 0),
         cleanExecutions: prev.cleanExecutions + (violations.length === 0 ? 1 : 0),
       }));
+
+      trackEvent('evaluation_complete', {
+        violation_count: violations.length,
+        has_violations: violations.length > 0,
+      });
     }, 300);
   }, []);
 
   const handleSampleSelect = useCallback((prompt: string) => {
+    trackEvent('sample_prompt_selected', { prompt_length: prompt.length });
     handleSubmit(prompt);
   }, [handleSubmit]);
 
