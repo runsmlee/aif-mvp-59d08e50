@@ -36,7 +36,7 @@ export function ProphylacticPanel({ prompt, state, violations, timeline, blocked
     <section
       aria-label="Prophylactic blocking panel"
       aria-live="polite"
-      className="bg-surface rounded-xl border border-border-primary border-t-2 border-t-green-500 shadow-sm overflow-hidden"
+      className="bg-surface rounded-xl border border-border-primary shadow-sm overflow-hidden ring-1 ring-green-100"
     >
       {/* Panel Header */}
       <div className="px-5 pt-5 pb-4">
@@ -105,7 +105,7 @@ export function ProphylacticPanel({ prompt, state, violations, timeline, blocked
 
             {/* Blocked State */}
             {state === 'complete' && blocked && violations.length > 0 && (
-              <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 animate-scale-in" role="alert">
+              <div className="bg-red-50 border border-red-300 rounded-xl p-4 animate-scale-in" role="alert">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

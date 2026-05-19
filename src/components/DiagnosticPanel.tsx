@@ -53,7 +53,7 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
     <section
       aria-label="Diagnostic logging panel"
       aria-live="polite"
-      className="bg-surface rounded-xl border border-border-primary border-t-2 border-t-amber-500 shadow-sm overflow-hidden"
+      className="bg-surface rounded-xl border border-border-primary shadow-sm overflow-hidden ring-1 ring-amber-100"
     >
       {/* Panel Header */}
       <div className="px-5 pt-5 pb-4">

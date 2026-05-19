@@ -18,7 +18,7 @@ const statItems = [
         <path d="M8 1L14.928 5V11L8 15L1.072 11V5L8 1Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
       </svg>
     ),
-    accent: 'border-t-blue-500',
+    accent: 'ring-blue-100',
     valueColor: 'text-text-primary',
   },
   {
@@ -31,7 +31,7 @@ const statItems = [
         <circle cx="8" cy="11.5" r="0.75" fill="currentColor"/>
       </svg>
     ),
-    accent: 'border-t-amber-500',
+    accent: 'ring-amber-100',
     valueColor: 'text-amber-700',
   },
   {
@@ -43,7 +43,7 @@ const statItems = [
         <path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
-    accent: 'border-t-brand-primary',
+    accent: 'ring-red-100',
     valueColor: 'text-brand-primary',
   },
   {
@@ -55,7 +55,7 @@ const statItems = [
         <path d="M5.5 8L7 9.5L10.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    accent: 'border-t-green-500',
+    accent: 'ring-green-100',
     valueColor: 'text-green-700',
   },
 ];
@@ -71,7 +71,7 @@ export function SummaryStats({ stats }: SummaryStatsProps) {
       {statItems.map((item) => (
         <div
           key={item.key}
-          className={`bg-surface rounded-xl border border-border-primary border-t-2 ${item.accent} p-4 text-center card-hover`}
+          className={`bg-surface rounded-xl border border-border-primary ring-1 ${item.accent} p-4 text-center card-hover`}
         >
           <div className="flex items-center justify-center mb-2">
             {item.icon}
