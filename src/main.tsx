@@ -1,19 +1,26 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 
-const rootElement = document.getElementById('root');
+function mountApp(): void {
+  const rootElement = document.getElementById('root');
 
-if (rootElement) {
+  if (!rootElement) {
+    console.error('GateFirst: Root element not found');
+    return;
+  }
+
   try {
     createRoot(rootElement).render(
       <StrictMode>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </StrictMode>
     );
   } catch (error) {
-    // If React fails to mount, ensure fallback content remains visible
     console.error('GateFirst: Failed to mount React app', error);
     const fallback = rootElement.querySelector('#root-fallback');
     if (fallback) {
@@ -23,6 +30,15 @@ if (rootElement) {
       fallback.appendChild(errorEl);
     }
   }
+}
+
+// Use DOMContentLoaded as a safety net to guarantee the DOM is fully
+// parsed before attempting to mount React. Module scripts are deferred
+// by spec, but explicit DOMContentLoaded eliminates any edge-case where
+// the root element might not yet be in the document tree.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mountApp);
 } else {
-  console.error('GateFirst: Root element not found');
+  // DOM already parsed (e.g. script loaded after DOMContentLoaded)
+  mountApp();
 }
