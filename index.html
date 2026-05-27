@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+<meta name="aif-mvp-id" content="59d08e50-89dd-47b5-be23-8c2541ea9866" />
+<meta name="aif-api" content="https://www.aifounders.live/api/analytics" />
+<script async src="https://www.aifounders.live/aif.js"></script>
+<meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GateFirst — Prophylactic Governance Visualizer</title>
     <meta name="description" content="GateFirst — See the difference between diagnostic logging and prophylactic blocking side by side. Interactive governance visualization for DevOps and security teams." />
     <meta property="og:title" content="GateFirst — Prophylactic Governance Visualizer" />
     <meta property="og:description" content="GateFirst — See the difference between diagnostic logging and prophylactic blocking side by side. Interactive governance visualization for DevOps and security teams." />
     <meta name="color-scheme" content="light" />
-    <meta name="aif-mvp-id" content="%VITE_MVP_ID%" />
-    <meta name="aif-api" content="https://www.aifounders.live/api/analytics" />
-    <script async src="https://www.aifounders.live/aif.js"></script>
     <style>
       /* Critical inline styles — visible before Tailwind loads */
       html, body {
@@ -81,6 +81,69 @@
       </div>
     </div>
     <noscript><p style="text-align:center;padding:2rem;color:#B91C1C;">JavaScript is required to use GateFirst. Please enable JavaScript in your browser settings.</p></noscript>
+    <!-- Inline error capture — runs synchronously BEFORE module scripts to catch load/eval failures -->
+    <script>
+      window.__gfErrors = [];
+      window.__gfMounted = false;
+      window.addEventListener('error', function(e) {
+        window.__gfErrors.push({
+          type: 'error',
+          message: e.message || 'Unknown error',
+          filename: e.filename || '',
+          lineno: e.lineno || 0,
+          colno: e.colno || 0,
+          stack: e.error && e.error.stack ? e.error.stack : '',
+          time: Date.now()
+        });
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var reason = e.reason;
+        window.__gfErrors.push({
+          type: 'unhandledrejection',
+          message: reason && reason.message ? reason.message : String(reason),
+          stack: reason && reason.stack ? reason.stack : '',
+          time: Date.now()
+        });
+      });
+      setTimeout(function() {
+        if (!window.__gfMounted) {
+          var root = document.getElementById('root');
+          if (!root) return;
+          var errors = window.__gfErrors;
+          var html = '<div style="padding:2rem;text-align:center;max-width:40rem;margin:0 auto;">';
+          html += '<div style="width:48px;height:48px;margin:0 auto 1rem;background:#FEE2E2;border-radius:12px;display:flex;align-items:center;justify-content:center;">';
+          html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#B91C1C" stroke-width="2"/><path d="M12 8v4m0 4h.01" stroke="#B91C1C" stroke-width="2" stroke-linecap="round"/></svg>';
+          html += '</div>';
+          html += '<h2 style="font-size:1.25rem;font-weight:700;color:#B91C1C;margin-bottom:0.5rem;">Application Failed to Load</h2>';
+          html += '<p style="color:#4B5563;font-size:0.875rem;margin-bottom:1rem;line-height:1.5;">';
+          html += 'The app did not initialize within 3 seconds. Diagnostic information is shown below to help identify the issue.</p>';
+          if (errors.length > 0) {
+            html += '<div style="text-align:left;background:#FEF2F2;border:1px solid #FECACA;border-radius:0.5rem;padding:1rem;margin-top:1rem;">';
+            html += '<p style="font-weight:600;color:#991B1B;margin:0 0 0.5rem;font-size:0.8125rem;">Captured errors:</p>';
+            for (var i = 0; i < errors.length; i++) {
+              var err = errors[i];
+              var detail = err.message || 'Unknown error';
+              if (err.filename) detail += '\n  at ' + err.filename + ':' + err.lineno + ':' + err.colno;
+              if (err.stack) detail += '\n' + err.stack;
+              html += '<pre style="font-size:0.6875rem;color:#7F1D1D;white-space:pre-wrap;word-break:break-all;margin:0.25rem 0;background:rgba(255,255,255,0.5);padding:0.5rem;border-radius:0.25rem;overflow:auto;max-height:12rem;">' + detail.replace(/</g, '&lt;') + '</pre>';
+            }
+            html += '</div>';
+          } else {
+            html += '<div style="text-align:left;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:0.5rem;padding:1rem;margin-top:1rem;">';
+            html += '<p style="color:#6B7280;font-size:0.8125rem;line-height:1.5;">No JavaScript errors were captured. Possible causes:</p>';
+            html += '<ul style="color:#6B7280;font-size:0.8125rem;text-align:left;padding-left:1.25rem;margin:0.5rem 0 0;line-height:1.6;">';
+            html += '<li>Module script failed to load (network error, 404, or MIME type issue)</li>';
+            html += '<li>A dependency failed to initialize before this script ran</li>';
+            html += '<li>Browser blocked the script (CSP, ad blocker, etc.)</li>';
+            html += '</ul></div>';
+          }
+          html += '<p style="margin-top:1rem;font-size:0.6875rem;color:#9CA3AF;">readyState: ' + document.readyState + ' &middot; URL: ' + window.location.href + '</p>';
+          html += '<button onclick="window.location.reload()" style="margin-top:1rem;padding:0.5rem 1.5rem;background:#B91C1C;color:white;border:none;border-radius:0.5rem;font-size:0.875rem;font-weight:600;cursor:pointer;min-height:44px;min-width:88px;">Refresh Page</button>';
+          html += '</div>';
+          root.innerHTML = html;
+        }
+      }, 3000);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
