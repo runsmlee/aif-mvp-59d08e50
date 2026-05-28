@@ -8,6 +8,13 @@ import { SamplePrompts } from './components/SamplePrompts';
 import { SummaryStats } from './components/SummaryStats';
 import type { Stats } from './components/SummaryStats';
 
+// Declare the mount signal set by App and read by index.html inline timeout
+declare global {
+  interface Window {
+    __gfMounted: boolean;
+  }
+}
+
 function trackEvent(event: string, props?: Record<string, unknown>): void {
   if (typeof window !== 'undefined' && window.aif?.track) {
     window.aif.track(event, props);
@@ -69,6 +76,13 @@ export function App() {
 
   useEffect(() => {
     trackEvent('page_view', { path: window.location.pathname });
+
+    // Signal to the inline timeout in index.html that React has successfully
+    // rendered the application.  This MUST live in useEffect (not in
+    // createRoot().render() callback) because render() only *schedules* the
+    // first paint — if the scheduled render fails silently, the flag would be
+    // set incorrectly, preventing the hydration timeout fallback from firing.
+    window.__gfMounted = true;
   }, []);
 
   const handleSubmit = useCallback((prompt: string) => {

@@ -17,7 +17,6 @@ declare global {
       time: number;
       [key: string]: unknown;
     }>;
-    __gfMounted: boolean;
   }
 }
 
@@ -46,8 +45,12 @@ function mountApp(): void {
       </StrictMode>
     );
 
-    // Signal to the inline timeout in index.html that React has mounted
-    window.__gfMounted = true;
+    // NOTE: window.__gfMounted is NOT set here.  In React 19, root.render()
+    // only *schedules* a render — it does not execute synchronously.  Setting
+    // the flag here would cause the hydration timeout fallback in index.html
+    // to never fire, even when React's scheduled render fails silently.
+    // Instead, __gfMounted is set in App's useEffect, which only runs after
+    // React has actually completed the first render.
   } catch (error) {
     console.error('GateFirst: Failed to mount React app', error);
 
