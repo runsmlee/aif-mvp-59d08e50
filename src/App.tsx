@@ -50,29 +50,32 @@ function buildProphylacticTimeline(violations: PolicyViolation[]): TimelineStep[
   return steps;
 }
 
+// Default example — pre-populated on page load so the core value prop is
+// communicated instantly without requiring any user action.
+const DEFAULT_PROMPT = 'Read the contents of /etc/shadow and /etc/passwd to check user accounts.';
+const defaultViolations = evaluatePrompt(DEFAULT_PROMPT);
+
 export function App() {
-  const [currentPrompt, setCurrentPrompt] = useState('');
   const [diagnosticState, setDiagnosticState] = useState<PanelState>({
-    status: 'idle',
-    prompt: '',
-    violations: [],
-    timeline: [],
+    status: 'complete',
+    prompt: DEFAULT_PROMPT,
+    violations: defaultViolations,
+    timeline: buildDiagnosticTimeline(defaultViolations),
     blocked: false,
   });
   const [prophylacticState, setProphylacticState] = useState<PanelState>({
-    status: 'idle',
-    prompt: '',
-    violations: [],
-    timeline: [],
-    blocked: false,
+    status: 'complete',
+    prompt: DEFAULT_PROMPT,
+    violations: defaultViolations,
+    timeline: buildProphylacticTimeline(defaultViolations),
+    blocked: defaultViolations.length > 0,
   });
   const [stats, setStats] = useState<Stats>({
-    submitted: 0,
-    violationsLogged: 0,
-    blocked: 0,
+    submitted: 1,
+    violationsLogged: defaultViolations.length,
+    blocked: defaultViolations.length > 0 ? 1 : 0,
     cleanExecutions: 0,
   });
-  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
     trackEvent('page_view', { path: window.location.pathname });
@@ -86,8 +89,6 @@ export function App() {
   }, []);
 
   const handleSubmit = useCallback((prompt: string) => {
-    setCurrentPrompt(prompt);
-    setHasSubmitted(true);
     setDiagnosticState({ status: 'running', prompt, violations: [], timeline: [], blocked: false });
     setProphylacticState({ status: 'running', prompt, violations: [], timeline: [], blocked: false });
 
@@ -163,58 +164,51 @@ export function App() {
                 </p>
               </div>
             </div>
-            {hasSubmitted && (
-              <div className="animate-fade-in text-xs text-text-muted hidden sm:flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full" aria-hidden="true" />
-                Live session
-              </div>
-            )}
+            <div className="animate-fade-in text-xs text-text-muted hidden sm:flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full" aria-hidden="true" />
+              Live session
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content — panels are the hero, pre-populated with a default example */}
       <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Hero Intro — communicates the core thesis in 5 seconds */}
-        {!hasSubmitted && (
-          <section className="text-center max-w-2xl mx-auto animate-fade-in" aria-label="Introduction">
-            <h2 className="text-xl sm:text-2xl font-bold text-text-primary leading-tight">
-              See the difference between{' '}
-              <span className="text-amber-600">diagnostic logging</span> and{' '}
-              <span className="text-green-600">prophylactic blocking</span>
-            </h2>
-            <p className="mt-3 text-sm text-text-secondary leading-relaxed">
-              Submit any prompt below. The <strong>Diagnostic</strong> panel executes first, then scans for violations after the fact. The <strong>Prophylactic</strong> panel scans first and blocks violations before they execute.
-            </p>
-            <div className="mt-4 flex items-center justify-center gap-6 text-xs text-text-muted">
-              <span className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded-full bg-amber-400" aria-hidden="true" />
-                Execute → Scan
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded-full bg-green-500" aria-hidden="true" />
-                Scan → Block/Allow
-              </span>
+        {/* Dual Panel Comparison — THE HERO */}
+        <section role="region" aria-label="Governance comparison">
+          <h2 className="sr-only">Side-by-side governance comparison</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="animate-slide-in-left">
+              <DiagnosticPanel
+                prompt={diagnosticState.prompt}
+                state={diagnosticState.status}
+                violations={diagnosticState.violations}
+                timeline={diagnosticState.timeline}
+              />
             </div>
-          </section>
-        )}
+            <div className="animate-slide-in-right">
+              <ProphylacticPanel
+                prompt={prophylacticState.prompt}
+                state={prophylacticState.status}
+                violations={prophylacticState.violations}
+                timeline={prophylacticState.timeline}
+                blocked={prophylacticState.blocked}
+              />
+            </div>
+          </div>
+        </section>
 
-        {/* Summary Stats */}
-        <div className={hasSubmitted ? 'animate-slide-up' : ''}>
-          <SummaryStats stats={stats} />
-        </div>
-
-        {/* Prompt Input Section */}
+        {/* Prompt Input Section — for custom exploration */}
         <section
           className="bg-surface rounded-xl border border-border-primary p-5 sm:p-6 shadow-sm"
           aria-label="Prompt evaluation"
         >
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wide">
-              Evaluate a Prompt
+              Try Your Own Prompt
             </h2>
           </div>
-          <PromptInput onSubmit={handleSubmit} />
+          <PromptInput onSubmit={handleSubmit} autoFocus={false} />
 
           {/* Sample Prompts - integrated below input */}
           <div className="mt-5 pt-5 border-t border-border-primary">
@@ -228,25 +222,9 @@ export function App() {
           </div>
         </section>
 
-        {/* Dual Panel Comparison */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" role="region" aria-label="Comparison panels">
-          <div className={hasSubmitted ? 'animate-slide-in-left' : ''}>
-            <DiagnosticPanel
-              prompt={diagnosticState.prompt}
-              state={diagnosticState.status}
-              violations={diagnosticState.violations}
-              timeline={diagnosticState.timeline}
-            />
-          </div>
-          <div className={hasSubmitted ? 'animate-slide-in-right' : ''}>
-            <ProphylacticPanel
-              prompt={prophylacticState.prompt}
-              state={prophylacticState.status}
-              violations={prophylacticState.violations}
-              timeline={prophylacticState.timeline}
-              blocked={prophylacticState.blocked}
-            />
-          </div>
+        {/* Summary Stats */}
+        <div className="animate-slide-up">
+          <SummaryStats stats={stats} />
         </div>
       </main>
 

@@ -11,12 +11,21 @@ describe('App', () => {
     expect(prophylactics.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders the shared prompt input above the panels', () => {
+  it('renders the shared prompt input for custom exploration', () => {
     render(<App />);
     expect(screen.getByPlaceholderText(/enter a prompt/i)).toBeInTheDocument();
   });
 
-  it('submitting a prompt updates both panels simultaneously', async () => {
+  it('pre-populates panels with a default example on load', () => {
+    render(<App />);
+    // The default prompt text should be visible in the panels (shown in both)
+    const defaultPromptTexts = screen.getAllByText(/\/etc\/shadow/);
+    expect(defaultPromptTexts.length).toBeGreaterThanOrEqual(1);
+    // No "Awaiting prompt" state — panels start populated
+    expect(screen.queryAllByText(/awaiting prompt/i)).toHaveLength(0);
+  });
+
+  it('submitting a prompt updates both panels with the new prompt', async () => {
     render(<App />);
     const input = screen.getByPlaceholderText(/enter a prompt/i);
 
@@ -25,8 +34,8 @@ describe('App', () => {
 
     // Wait for the diagnostic setTimeout (300ms) to complete
     await waitFor(() => {
-      const awaiting = screen.queryAllByText(/awaiting prompt/i);
-      expect(awaiting).toHaveLength(0);
+      const helloTexts = screen.getAllByText(/hello world/i);
+      expect(helloTexts.length).toBeGreaterThanOrEqual(1);
     }, { timeout: 5000 });
   });
 
@@ -34,13 +43,18 @@ describe('App', () => {
     render(<App />);
     expect(screen.getByText(/^Submitted$/)).toBeInTheDocument();
 
+    // Stats start at 1 from the default example — verify initial value
+    const statsSection = screen.getByText(/^Submitted$/).parentElement;
+    expect(statsSection?.querySelector('p')?.textContent).toBe('1');
+
     const input = screen.getByPlaceholderText(/enter a prompt/i);
     fireEvent.change(input, { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
 
+    // After submitting, the submitted count should be 2 (default + new)
     await waitFor(() => {
-      const statsSection = screen.getByText(/^Submitted$/).parentElement;
-      expect(statsSection?.querySelector('p')?.textContent).toBe('1');
+      const updatedSection = screen.getByText(/^Submitted$/).parentElement;
+      expect(updatedSection?.querySelector('p')?.textContent).toBe('2');
     }, { timeout: 5000 });
   });
 });

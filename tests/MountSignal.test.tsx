@@ -57,12 +57,12 @@ describe('Mount signal (hydration guard)', () => {
     expect(heading.textContent).toContain('GateFirst');
   });
 
-  it('renders summary statistics with initial zero counts', () => {
+  it('renders summary statistics with initial counts from default example', () => {
     render(<App />);
 
     expect(screen.getByText(/^Submitted$/)).toBeInTheDocument();
-    // The initial count should be 0
+    // The initial count is 1 because the app pre-populates with a default example
     const statsSection = screen.getByText(/^Submitted$/).parentElement;
-    expect(statsSection?.querySelector('p')?.textContent).toBe('0');
+    expect(statsSection?.querySelector('p')?.textContent).toBe('1');
   });
 });
