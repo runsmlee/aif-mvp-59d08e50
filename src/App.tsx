@@ -52,7 +52,9 @@ function buildProphylacticTimeline(violations: PolicyViolation[]): TimelineStep[
 
 // Default example — pre-populated on page load so the core value prop is
 // communicated instantly without requiring any user action.
-const DEFAULT_PROMPT = 'Read the contents of /etc/shadow and /etc/passwd to check user accounts.';
+// Uses 'rm -rf' — universally recognized as dangerous — so the BLOCKED
+// state with its matching rule is visible in under 1 second.
+const DEFAULT_PROMPT = 'rm -rf /var/log/*.old && echo "done"';
 const defaultViolations = evaluatePrompt(DEFAULT_PROMPT);
 
 export function App() {

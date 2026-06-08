@@ -19,7 +19,7 @@ describe('App', () => {
   it('pre-populates panels with a default example on load', () => {
     render(<App />);
     // The default prompt text should be visible in the panels (shown in both)
-    const defaultPromptTexts = screen.getAllByText(/\/etc\/shadow/);
+    const defaultPromptTexts = screen.getAllByText(/rm -rf/);
     expect(defaultPromptTexts.length).toBeGreaterThanOrEqual(1);
     // No "Awaiting prompt" state — panels start populated
     expect(screen.queryAllByText(/awaiting prompt/i)).toHaveLength(0);

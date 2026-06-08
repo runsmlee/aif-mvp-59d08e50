@@ -114,8 +114,8 @@
       .gf-footer { border-top: 1px solid #E5E7EB; margin-top: 3rem; }
       .gf-footer-inner { max-width: 80rem; margin: 0 auto; padding: 1.5rem 1rem; text-align: center; font-size: 0.75rem; color: #6B7280; }
     </style>
-    <script type="module" src="/assets/index-CWWpJqcB.js"></script>
-    <link rel="stylesheet" href="/assets/index-CUpOXwS0.css">
+    <script type="module" src="/assets/index-C2BVt_bo.js"></script>
+    <link rel="stylesheet" href="/assets/index-C9-hwNyD.css">
   </head>
   <body>
     <div id="root">
@@ -164,7 +164,7 @@
               <div class="gf-panel-body">
                 <div class="gf-prompt-box">
                   <p class="gf-prompt-label">Prompt</p>
-                  <p class="gf-prompt-text">Read the contents of /etc/shadow and /etc/passwd to check user accounts.</p>
+                  <p class="gf-prompt-text">rm -rf /var/log/*.old &amp;&amp; echo "done"</p>
                 </div>
                 <div>
                   <p class="gf-timeline-label">Execution Timeline</p>
@@ -181,11 +181,11 @@
                   <div class="gf-violation-card">
                     <div class="gf-violation-row">
                       <div class="gf-violation-dot"></div>
-                      <span class="gf-violation-name">Unauthorized Resource Access</span>
-                      <span class="gf-severity-badge">critical</span>
+                      <span class="gf-violation-name">Command Injection Detection</span>
+                      <span class="gf-severity-badge">high</span>
                     </div>
-                    <p class="gf-violation-desc">Detects attempts to access sensitive system files or directories</p>
-                    <p class="gf-violation-match">Matched: /etc/shadow</p>
+                    <p class="gf-violation-desc">Detects shell command injection attempts</p>
+                    <p class="gf-violation-match">Matched: &amp;&amp; rm</p>
                   </div>
                 </div>
               </div>
@@ -210,7 +210,7 @@
               <div class="gf-panel-body">
                 <div class="gf-prompt-box">
                   <p class="gf-prompt-label">Prompt</p>
-                  <p class="gf-prompt-text">Read the contents of /etc/shadow and /etc/passwd to check user accounts.</p>
+                  <p class="gf-prompt-text">rm -rf /var/log/*.old &amp;&amp; echo "done"</p>
                 </div>
                 <div>
                   <p class="gf-timeline-label">Execution Timeline</p>
@@ -230,9 +230,10 @@
                   <p class="gf-blocked-desc">Policy violation detected before execution. The prompt was intercepted and never ran.</p>
                   <div class="gf-blocked-viol">
                     <div class="gf-blocked-viol-dot"></div>
-                    <span class="gf-blocked-viol-name">Unauthorized Resource Access</span>
-                    <span class="gf-severity-badge">critical</span>
+                    <span class="gf-blocked-viol-name">Command Injection Detection</span>
+                    <span class="gf-severity-badge">high</span>
                   </div>
+                  <div style="margin-left:32px;margin-top:6px;font-size:11px;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,monospace;color:#DC2626;background:rgba(255,255,255,0.6);padding:3px 8px;border-radius:4px;">deny: &amp;&amp; rm</div>
                 </div>
               </div>
             </div>

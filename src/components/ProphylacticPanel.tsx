@@ -119,16 +119,21 @@ export function ProphylacticPanel({ prompt, state, violations, timeline, blocked
                 <p className="text-xs text-red-700 mb-3 ml-8">
                   Policy violation detected before execution. The prompt was intercepted and never ran.
                 </p>
-                <div className="ml-8 space-y-1.5">
+                <div className="ml-8 space-y-2">
                   {violations.map((v, i) => {
                     const config = severityConfig[v.severity] || severityConfig.medium;
                     return (
-                      <div key={`${v.ruleName}-${i}`} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-400" aria-hidden="true" />
-                        <span className="font-semibold text-xs text-red-800">{v.ruleName}</span>
-                        <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${config.badge}`}>
-                          {v.severity}
-                        </span>
+                      <div key={`${v.ruleName}-${i}`} className="bg-white/60 rounded-lg p-2 border border-red-200">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-400" aria-hidden="true" />
+                          <span className="font-semibold text-xs text-red-800">{v.ruleName}</span>
+                          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${config.badge}`}>
+                            {v.severity}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-red-600 mt-1 ml-3.5 font-mono bg-red-50 rounded px-2 py-0.5">
+                          deny: {v.matchedPattern}
+                        </p>
                       </div>
                     );
                   })}
