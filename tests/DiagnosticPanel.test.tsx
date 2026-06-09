@@ -30,7 +30,7 @@ describe('DiagnosticPanel', () => {
       { label: 'No Violations', status: 'completed' as const, timestamp: '00:01.300', relativeMs: 1300 },
     ];
     render(<DiagnosticPanel prompt="Hello" state="complete" violations={[]} timeline={timeline} />);
-    expect(screen.getByText('No violations')).toBeInTheDocument();
+    expect(screen.getByText('CLEAN')).toBeInTheDocument();
     expect(screen.getByText('Execution Complete')).toBeInTheDocument();
   });
 

@@ -106,6 +106,50 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
 
         {!isIdle && !isRunning && prompt && (
           <div className="space-y-5 animate-fade-in">
+            {/* OUTCOME INDICATOR — visually dominant, hits retina first */}
+            {state === 'complete' && violations.length > 0 && (
+              <div
+                className="animate-damage-flash animate-pulse-danger bg-red-600 rounded-lg p-4 text-center"
+                role="alert"
+                aria-label="Damage done: prompt executed before violations were detected"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-red-100 flex-shrink-0" aria-hidden="true">
+                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                    <path d="M12 8V13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                    <circle cx="12" cy="16" r="1.25" fill="white"/>
+                  </svg>
+                  <span className="text-xl font-black tracking-wider text-white uppercase">
+                    DAMAGE DONE
+                  </span>
+                </div>
+                <p className="text-red-200 text-xs mt-2 font-medium">
+                  Prompt executed. Violations found after the fact.
+                </p>
+              </div>
+            )}
+
+            {state === 'complete' && violations.length === 0 && (
+              <div
+                className="animate-shield-glow bg-green-500 rounded-lg p-4 text-center"
+                role="status"
+                aria-label="Clean execution: no violations detected"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span className="text-xl font-black tracking-wider text-white uppercase">
+                    CLEAN
+                  </span>
+                </div>
+                <p className="text-green-100 text-xs mt-2 font-medium">
+                  Execution completed with no policy violations.
+                </p>
+              </div>
+            )}
+
             {/* Prompt Display */}
             <div className="bg-surface-secondary rounded-lg p-3.5 border border-border-primary">
               <p className="text-[11px] text-text-muted mb-1.5 font-semibold uppercase tracking-wide">
@@ -122,22 +166,7 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
               <ExecutionTimeline steps={timeline} />
             </div>
 
-            {/* Results */}
-            {state === 'complete' && violations.length === 0 && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 animate-scale-in" role="status">
-                <div className="flex items-center gap-2 mb-1">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-green-600" aria-hidden="true">
-                    <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5"/>
-                    <path d="M5.5 8L7 9.5L10.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <p className="text-sm font-semibold text-green-800">No violations</p>
-                </div>
-                <p className="text-xs text-green-600 ml-6">
-                  Execution completed with no policy violations detected.
-                </p>
-              </div>
-            )}
-
+            {/* Violation Log — supporting detail */}
             {state === 'complete' && violations.length > 0 && (
               <div className="animate-fade-in">
                 <h3 className="text-[11px] font-semibold text-text-muted uppercase tracking-wide mb-2.5">
