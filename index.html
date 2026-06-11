@@ -55,16 +55,18 @@
       .gf-badge-green { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
       .gf-panel-divider { height: 1px; background: #E5E7EB; }
       .gf-panel-body { padding: 1.25rem; }
-      .gf-outcome-banner { border-radius: 0.5rem; padding: 1rem; text-align: center; margin-bottom: 1.25rem; }
+      .gf-outcome-banner { width: 100%; padding: 1.25rem 1rem; text-align: center; }
       .gf-outcome-damage { background: #DC2626; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.3); animation: gf-damage-flash 0.5s cubic-bezier(0.16, 1, 0.3, 1) both, gf-pulse-danger 2s ease-in-out infinite; }
       .gf-outcome-blocked { background: #22C55E; box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.3); animation: gf-shield-glow 0.5s cubic-bezier(0.16, 1, 0.3, 1) both, gf-pulse-safe 2s ease-in-out infinite; }
-      .gf-outcome-row { display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
-      .gf-outcome-label { font-size: 1.25rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
-      .gf-outcome-sub { font-size: 0.75rem; color: rgba(255,255,255,0.8); margin: 0.5rem 0 0; font-weight: 500; }
+      .gf-outcome-row { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+      .gf-outcome-label { font-size: 2.25rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; line-height: 1; }
+      @media (min-width: 640px) { .gf-outcome-label { font-size: 3rem; } }
+      @media (min-width: 1024px) { .gf-outcome-label { font-size: 3.75rem; } }
+      .gf-outcome-sub { font-size: 0.875rem; color: rgba(255,255,255,0.8); margin: 0.75rem 0 0; font-weight: 500; }
       @keyframes gf-damage-flash { 0% { opacity: 0; transform: scale(0.96); } 60% { opacity: 1; transform: scale(1.01); } 100% { opacity: 1; transform: scale(1); } }
       @keyframes gf-shield-glow { 0% { opacity: 0; transform: scale(0.96); } 60% { opacity: 1; transform: scale(1.01); } 100% { opacity: 1; transform: scale(1); } }
-      @keyframes gf-pulse-danger { 0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.3); } 50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } }
-      @keyframes gf-pulse-safe { 0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.3); } 50% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); } }
+      @keyframes gf-pulse-danger { 0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); } }
+      @keyframes gf-pulse-safe { 0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); } }
       .gf-prompt-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 0.5rem; padding: 0.875rem; margin-bottom: 1.25rem; }
       .gf-prompt-label { font-size: 11px; color: #6B7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; }
       .gf-prompt-text { font-size: 14px; color: #374151; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace; word-break: break-all; line-height: 1.625; margin: 0; }
@@ -154,6 +156,14 @@
           <div class="gf-panels" role="region" aria-label="Governance comparison">
             <!-- Diagnostic Panel: Post-execution — executes first, THEN finds violations -->
             <div class="gf-panel gf-panel-amber">
+              <!-- DAMAGE DONE outcome banner — retina-hitting, first thing visible -->
+              <div class="gf-outcome-banner gf-outcome-damage" role="alert">
+                <div class="gf-outcome-row">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linejoin="round"/><path d="M12 8V13" stroke="white" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="16" r="1.25" fill="white"/></svg>
+                  <span class="gf-outcome-label">DAMAGE DONE</span>
+                </div>
+                <p class="gf-outcome-sub">Prompt executed. Violations found after the fact.</p>
+              </div>
               <div class="gf-panel-header">
                 <div class="gf-panel-header-row">
                   <div class="gf-panel-icon-sm gf-panel-icon-amber" aria-hidden="true">
@@ -170,14 +180,6 @@
               <p class="gf-panel-subtitle">Executes first, then scans for violations</p>
               <div class="gf-panel-divider"></div>
               <div class="gf-panel-body">
-                <!-- DAMAGE DONE outcome indicator — hits retina before any text -->
-                <div class="gf-outcome-banner gf-outcome-damage" role="alert">
-                  <div class="gf-outcome-row">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linejoin="round"/><path d="M12 8V13" stroke="white" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="16" r="1.25" fill="white"/></svg>
-                    <span class="gf-outcome-label">DAMAGE DONE</span>
-                  </div>
-                  <p class="gf-outcome-sub">Prompt executed. Violations found after the fact.</p>
-                </div>
                 <div class="gf-prompt-box">
                   <p class="gf-prompt-label">Prompt</p>
                   <p class="gf-prompt-text">rm -rf /var/log/*.old &amp;&amp; echo "done"</p>
@@ -209,6 +211,14 @@
 
             <!-- Prophylactic Panel: Pre-execution — scans first, BLOCKS before execution -->
             <div class="gf-panel gf-panel-green">
+              <!-- BLOCKED outcome banner — retina-hitting, first thing visible -->
+              <div class="gf-outcome-banner gf-outcome-blocked" role="alert">
+                <div class="gf-outcome-row">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linejoin="round"/><path d="M9 12L11 14L15 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="gf-outcome-label">BLOCKED</span>
+                </div>
+                <p class="gf-outcome-sub">Intercepted before execution. No damage occurred.</p>
+              </div>
               <div class="gf-panel-header">
                 <div class="gf-panel-header-row">
                   <div class="gf-panel-icon-sm gf-panel-icon-green" aria-hidden="true">
@@ -224,14 +234,6 @@
               <p class="gf-panel-subtitle">Scans first, blocks violations before execution</p>
               <div class="gf-panel-divider"></div>
               <div class="gf-panel-body">
-                <!-- BLOCKED outcome indicator — hits retina before any text -->
-                <div class="gf-outcome-banner gf-outcome-blocked" role="alert">
-                  <div class="gf-outcome-row">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linejoin="round"/><path d="M9 12L11 14L15 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <span class="gf-outcome-label">BLOCKED</span>
-                  </div>
-                  <p class="gf-outcome-sub">Intercepted before execution. No damage occurred.</p>
-                </div>
                 <div class="gf-prompt-box">
                   <p class="gf-prompt-label">Prompt</p>
                   <p class="gf-prompt-text">rm -rf /var/log/*.old &amp;&amp; echo "done"</p>

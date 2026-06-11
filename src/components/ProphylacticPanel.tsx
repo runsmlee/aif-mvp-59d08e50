@@ -31,6 +31,7 @@ function SkeletonLoader() {
 
 export function ProphylacticPanel({ prompt, state, violations, timeline, blocked }: ProphylacticPanelProps) {
   const isIdle = state === 'idle' && !prompt;
+  const hasOutcome = !isIdle && state !== 'running' && prompt && state === 'complete';
 
   return (
     <section
@@ -38,6 +39,49 @@ export function ProphylacticPanel({ prompt, state, violations, timeline, blocked
       aria-live="polite"
       className="bg-surface rounded-xl border border-border-primary shadow-sm overflow-hidden ring-1 ring-green-100"
     >
+      {/* ── OUTCOME BANNER — retina-hitting, first thing the eye lands on ── */}
+      {hasOutcome && blocked && violations.length > 0 && (
+        <div
+          className="animate-shield-glow animate-pulse-safe bg-green-500 w-full py-5 sm:py-6 text-center"
+          role="alert"
+          aria-label="Blocked: policy violation intercepted before execution"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
+              <path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+              <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-wider text-white uppercase leading-none">
+              BLOCKED
+            </span>
+          </div>
+          <p className="text-green-100 text-sm mt-3 font-medium">
+            Intercepted before execution. No damage occurred.
+          </p>
+        </div>
+      )}
+
+      {hasOutcome && !blocked && violations.length === 0 && (
+        <div
+          className="animate-shield-glow bg-green-500 w-full py-5 sm:py-6 text-center"
+          role="status"
+          aria-label="Approved: policy check passed"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
+              <path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+              <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-wider text-white uppercase leading-none">
+              APPROVED
+            </span>
+          </div>
+          <p className="text-green-100 text-sm mt-3 font-medium">
+            Policy check passed. Prompt executed successfully.
+          </p>
+        </div>
+      )}
+
       {/* Panel Header */}
       <div className="px-5 pt-5 pb-4">
         <div className="flex items-center justify-between">
@@ -87,49 +131,6 @@ export function ProphylacticPanel({ prompt, state, violations, timeline, blocked
 
         {!isIdle && state !== 'running' && prompt && (
           <div className="space-y-5 animate-fade-in">
-            {/* OUTCOME INDICATOR — visually dominant, hits retina first */}
-            {state === 'complete' && blocked && violations.length > 0 && (
-              <div
-                className="animate-shield-glow animate-pulse-safe bg-green-500 rounded-lg p-4 text-center"
-                role="alert"
-                aria-label="Blocked: policy violation intercepted before execution"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
-                    <path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                    <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span className="text-xl font-black tracking-wider text-white uppercase">
-                    BLOCKED
-                  </span>
-                </div>
-                <p className="text-green-100 text-xs mt-2 font-medium">
-                  Intercepted before execution. No damage occurred.
-                </p>
-              </div>
-            )}
-
-            {state === 'complete' && !blocked && violations.length === 0 && (
-              <div
-                className="animate-shield-glow bg-green-500 rounded-lg p-4 text-center"
-                role="status"
-                aria-label="Approved: policy check passed"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
-                    <path d="M12 2L3 7V12C3 17.25 6.9 22.05 12 23.25C17.1 22.05 21 17.25 21 12V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                    <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span className="text-xl font-black tracking-wider text-white uppercase">
-                    APPROVED
-                  </span>
-                </div>
-                <p className="text-green-100 text-xs mt-2 font-medium">
-                  Policy check passed. Prompt executed successfully.
-                </p>
-              </div>
-            )}
-
             {/* Prompt Display */}
             <div className="bg-surface-secondary rounded-lg p-3.5 border border-border-primary">
               <p className="text-[11px] text-text-muted mb-1.5 font-semibold uppercase tracking-wide">

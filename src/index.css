@@ -127,13 +127,13 @@ body {
 }
 
 @keyframes pulse-danger {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
 }
 
 @keyframes pulse-safe {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
 }
 
 /* === Animation Utilities === */

@@ -48,6 +48,7 @@ function SkeletonLoader() {
 export function DiagnosticPanel({ prompt, state, violations, timeline }: DiagnosticPanelProps) {
   const isIdle = state === 'idle' && !prompt;
   const isRunning = state === 'running';
+  const hasOutcome = !isIdle && !isRunning && prompt && state === 'complete';
 
   return (
     <section
@@ -55,6 +56,50 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
       aria-live="polite"
       className="bg-surface rounded-xl border border-border-primary shadow-sm overflow-hidden ring-1 ring-amber-100"
     >
+      {/* ── OUTCOME BANNER — retina-hitting, first thing the eye lands on ── */}
+      {hasOutcome && violations.length > 0 && (
+        <div
+          className="animate-damage-flash animate-pulse-danger bg-red-600 w-full py-5 sm:py-6 text-center"
+          role="alert"
+          aria-label="Damage done: prompt executed before violations were detected"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-red-200 flex-shrink-0" aria-hidden="true">
+              <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+              <path d="M12 8V13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              <circle cx="12" cy="16" r="1.25" fill="white"/>
+            </svg>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-wider text-white uppercase leading-none">
+              DAMAGE DONE
+            </span>
+          </div>
+          <p className="text-red-200 text-sm mt-3 font-medium">
+            Prompt executed. Violations found after the fact.
+          </p>
+        </div>
+      )}
+
+      {hasOutcome && violations.length === 0 && (
+        <div
+          className="animate-shield-glow bg-green-500 w-full py-5 sm:py-6 text-center"
+          role="status"
+          aria-label="Clean execution: no violations detected"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+              <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-wider text-white uppercase leading-none">
+              CLEAN
+            </span>
+          </div>
+          <p className="text-green-100 text-sm mt-3 font-medium">
+            Execution completed with no policy violations.
+          </p>
+        </div>
+      )}
+
       {/* Panel Header */}
       <div className="px-5 pt-5 pb-4">
         <div className="flex items-center justify-between">
@@ -106,50 +151,6 @@ export function DiagnosticPanel({ prompt, state, violations, timeline }: Diagnos
 
         {!isIdle && !isRunning && prompt && (
           <div className="space-y-5 animate-fade-in">
-            {/* OUTCOME INDICATOR — visually dominant, hits retina first */}
-            {state === 'complete' && violations.length > 0 && (
-              <div
-                className="animate-damage-flash animate-pulse-danger bg-red-600 rounded-lg p-4 text-center"
-                role="alert"
-                aria-label="Damage done: prompt executed before violations were detected"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-red-100 flex-shrink-0" aria-hidden="true">
-                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                    <path d="M12 8V13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                    <circle cx="12" cy="16" r="1.25" fill="white"/>
-                  </svg>
-                  <span className="text-xl font-black tracking-wider text-white uppercase">
-                    DAMAGE DONE
-                  </span>
-                </div>
-                <p className="text-red-200 text-xs mt-2 font-medium">
-                  Prompt executed. Violations found after the fact.
-                </p>
-              </div>
-            )}
-
-            {state === 'complete' && violations.length === 0 && (
-              <div
-                className="animate-shield-glow bg-green-500 rounded-lg p-4 text-center"
-                role="status"
-                aria-label="Clean execution: no violations detected"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-100 flex-shrink-0" aria-hidden="true">
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
-                    <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span className="text-xl font-black tracking-wider text-white uppercase">
-                    CLEAN
-                  </span>
-                </div>
-                <p className="text-green-100 text-xs mt-2 font-medium">
-                  Execution completed with no policy violations.
-                </p>
-              </div>
-            )}
-
             {/* Prompt Display */}
             <div className="bg-surface-secondary rounded-lg p-3.5 border border-border-primary">
               <p className="text-[11px] text-text-muted mb-1.5 font-semibold uppercase tracking-wide">
