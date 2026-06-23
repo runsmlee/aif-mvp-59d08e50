@@ -25,6 +25,16 @@ describe('App', () => {
     expect(screen.queryAllByText(/awaiting prompt/i)).toHaveLength(0);
   });
 
+  it('renders DAMAGE DONE banner in diagnostic panel on load (regression: core value prop)', () => {
+    render(<App />);
+    expect(screen.getByText('DAMAGE DONE')).toBeInTheDocument();
+  });
+
+  it('renders BLOCKED banner in prophylactic panel on load (regression: core value prop)', () => {
+    render(<App />);
+    expect(screen.getByText('BLOCKED')).toBeInTheDocument();
+  });
+
   it('submitting a prompt updates both panels with the new prompt', async () => {
     render(<App />);
     const input = screen.getByPlaceholderText(/enter a prompt/i);

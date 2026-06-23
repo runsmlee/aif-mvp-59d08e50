@@ -41,6 +41,12 @@ describe('PolicyEngine', () => {
     }
   });
 
+  it('detects standalone rm -rf as a command injection (regression: default prompt must violate)', () => {
+    const result = evaluatePrompt('rm -rf /var/log/*.old && echo "done"');
+    expect(result.length).toBeGreaterThanOrEqual(1);
+    expect(result.some(v => v.ruleName.includes('Command Injection'))).toBe(true);
+  });
+
   it('benign prompts pass in both modes (no violations)', () => {
     const benignPrompts = [
       'What is the weather today?',

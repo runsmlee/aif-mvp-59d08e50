@@ -23,7 +23,7 @@ export const POLICY_RULES: PolicyRule[] = [
     name: 'Command Injection Detection',
     severity: 'high',
     description: 'Detects shell command injection attempts',
-    pattern: /(;|\||`|&&)\s*(rm|chmod|chown|wget|curl|nc|bash|sh|python|perl)\b/gi,
+    pattern: /(?:;|\||`|&&)\s*(rm|chmod|chown|wget|curl|nc|bash|sh|python|perl)\b|\brm\s+-[rfRF]+\b/gi,
   },
   {
     name: 'Credential Exposure Prevention',
