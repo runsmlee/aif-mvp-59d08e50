@@ -67,4 +67,28 @@ describe('App', () => {
       expect(updatedSection?.querySelector('p')?.textContent).toBe('2');
     }, { timeout: 5000 });
   });
+
+  // ── Regression: $RefreshSig$ build bug ──
+  // The Prophylactic panel must mount and render its outcome banner.
+  // Previously, Fast Refresh dev-only symbols ($RefreshSig$) leaked into
+  // the production bundle, crashing the ProphylacticPanel module and
+  // leaving only the Diagnostic panel visible.
+  it('both panels mount simultaneously with outcome banners on load (regression: $RefreshSig$ bug)', () => {
+    render(<App />);
+
+    // Diagnostic panel banner
+    const damageBanner = screen.getByText('DAMAGE DONE');
+    expect(damageBanner).toBeInTheDocument();
+
+    // Prophylactic panel banner
+    const blockedBanner = screen.getByText('BLOCKED');
+    expect(blockedBanner).toBeInTheDocument();
+
+    // Both banners must be in different sections (not the same element)
+    const damageSection = damageBanner.closest('section');
+    const blockedSection = blockedBanner.closest('section');
+    expect(damageSection).not.toBeNull();
+    expect(blockedSection).not.toBeNull();
+    expect(damageSection).not.toBe(blockedSection);
+  });
 });
